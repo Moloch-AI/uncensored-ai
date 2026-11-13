@@ -27,7 +27,7 @@ flowchart LR
 | [Deployment options](docs/deployment-options.md) | Self-hosted runtimes and a hosted API side by side: memory, operations, data control, cost, tool calling |
 | [Models](docs/models.md) | The five MolochAI models, their base model cards, choosing one, testing one on your own prompts |
 | [Setup](docs/setup.md) | Account and key, first requests, the SDKs, and Open WebUI, SillyTavern, LibreChat and coding agents |
-| [Building applications](docs/building-applications.md) | System prompts, moderation, streaming, reasoning, tools, JSON without a JSON mode, context limits, retries |
+| [Building applications](docs/building-applications.md) | System prompts, moderation, streaming, reasoning, tools, JSON without a JSON mode, context limits, retries, and what LangChain, LiteLLM and the Vercel AI SDK change |
 | [Troubleshooting](docs/troubleshooting.md) | Symptom, cause and fix, and every HTTP status |
 | [FAQ](docs/faq.md) | Short answers with links |
 | [Responsible use](docs/responsible-use.md) | The Acceptable Use Policy, legitimate uses, and what apps for other people need |
@@ -154,8 +154,8 @@ Streaming is the default to reach for: Cloudflare in front of the API gives up o
 The OpenAI SDKs work and are a fine choice. The [Python](https://github.com/Moloch-AI/uncensored-ai-python) and [TypeScript](https://github.com/Moloch-AI/uncensored-ai-node) SDKs add typed errors for the API's three error shapes (with `resets_at`, `context_cap`, `bound_by`), queue progress from stream comments, no retries on quota errors that cannot pass, `/auth/me` for per-model context limits, and handling of in-stream errors and the cap notice. Registry packages are not published yet; install from GitHub:
 
 ```bash
-pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.1"
-npm install github:Moloch-AI/uncensored-ai-node#v0.1.0
+pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.2"
+npm install github:Moloch-AI/uncensored-ai-node#v0.1.1
 pipx install "git+https://github.com/Moloch-AI/uncensored-ai-cli@v0.1.0"
 ```
 

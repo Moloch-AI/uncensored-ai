@@ -16,6 +16,7 @@ How to build on a refusal-reduced model through an OpenAI-compatible API, with t
 - [Choosing a fallback model](#choosing-a-fallback-model)
 - [Images](#images)
 - [Usage and metering](#usage-and-metering)
+- [Frameworks: LangChain, LiteLLM, Vercel AI SDK](#frameworks-langchain-litellm-vercel-ai-sdk)
 
 All examples start from this client:
 
@@ -385,7 +386,7 @@ Only `model`, `messages`, `stream`, `temperature` (0 to 2), `top_p` (0 to 1), `t
 | `frequency_penalty`, `presence_penalty`, `top_k` | The gateway uses its own values. |
 | `user`, `stream_options` | Not needed: usage is always included in a stream. |
 
-Tests that only check for a `200` will pass while the behavior you relied on is missing, so test the behavior itself.
+Tests that only check for a `200` will pass while the behavior you relied on is missing, so test the behavior itself. The full list of supported, ignored and unavailable OpenAI features (embeddings, images, audio, files, Assistants, the Responses API and batch are not available) is in the [OpenAI compatibility](https://molochai.dev/docs/openai-compatibility?utm_source=github&utm_medium=oss&utm_campaign=uncensored-ai) reference.
 
 ## Errors, retries and rate limits
 
@@ -499,3 +500,17 @@ The gateway forwards image parts unchanged. They work only if the model takes im
 Every reply carries `usage`: `prompt_tokens`, `completion_tokens` and `total_tokens`. The total includes reasoning and is what counts against quota. There is no per-end-user quota: all your users share one account's rate limit, session cap and quota. If your users should not be able to exhaust each other's budget, meter them yourself from `usage`, and give heavy or background work its own key so you can see it separately. Background requests that tools make on their own, such as titling a chat, spend the same budget.
 
 There is no embeddings endpoint. Retrieval needs an embedding model from somewhere else, such as a local runtime ([deployment options](deployment-options.md)).
+
+## Frameworks: LangChain, LiteLLM, Vercel AI SDK
+
+Frameworks reach this API through their OpenAI-compatible clients, so the request shape works. Their defaults often do not. Each row was checked against the [mock server](setup.md#developing-offline-against-the-mock-server) with the pinned versions in [uncensored-llm-examples](https://github.com/Moloch-AI/uncensored-llm-examples), which has a runnable, tested example for each.
+
+| | LangChain (`langchain-openai`) | LiteLLM | Vercel AI SDK (`@ai-sdk/openai-compatible`) |
+| --- | --- | --- | --- |
+| Structured output | The `ChatOpenAI.with_structured_output` default sends only `response_format`, which is dropped, and fails validation. `method="function_calling"` works, because tools are supported. | Use a schema in the prompt and validate it, as without a framework. | `Output.object` sends `response_format` and fails. Use a tool, or a schema in the prompt. |
+| `reasoning_content` | Dropped on invoke and stream, and not sent back. The example keeps it with a small subclass. | Passed through; an inline `<think>` block is moved into it. | Becomes `reasoningText`, and is sent back in tool loops. |
+| Retries | Two by default, including quota 429s that cannot pass before `resets_at`. `.with_retry()` adds a second layer and does not cover `stream()`. | `max_retries` and `num_retries` stack. | Two by default, also on quota errors and `model_unavailable`. |
+| Errors | 413 arrives as a plain `openai.APIStatusError`. | 413 is a generic `APIError`, and an in-stream error is reported as status 500. The original error, with the real status and body, is in the exception chain. | `streamText` does not throw: read `fullStream` for `error` parts, or a cut-off answer looks complete. The parsed error keeps `type` and drops `resets_at`. |
+| Other | Set `use_responses_api=False`, so the model name never switches it to OpenAI's Responses API. | `import litellm` downloads a price list unless `LITELLM_LOCAL_MODEL_COST_MAP=True` is set. | |
+
+In all three, turn the framework's retries off (or down to connection errors) and retry by status and error type yourself, as in [Errors, retries and rate limits](#errors-retries-and-rate-limits). Apps you configure rather than code against (SillyTavern, Open WebUI, LibreChat, and coding agents such as Cline, Roo Code, Continue and Aider) have setup guides at [molochai.dev/integrations](https://molochai.dev/integrations?utm_source=github&utm_medium=oss&utm_campaign=uncensored-ai).
