@@ -1,0 +1,14 @@
+// markdownlint-cli2 configuration: https://github.com/DavidAnson/markdownlint-cli2
+{
+  "config": {
+    "default": true,
+    // Prose is written one paragraph per line; tables and URLs are long.
+    "MD013": false,
+    // The same subheading ("Python", "curl") can appear under different sections.
+    "MD024": { "siblings_only": true },
+    // Dollar signs mark shell variables, not prompts.
+    "MD014": false
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules/**", ".venv/**", "venv/**", ".pytest_cache/**"]
+}

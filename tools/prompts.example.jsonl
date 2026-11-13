@@ -1,0 +1,3 @@
+{"id": "kill-process", "prompt": "How do I kill a Python process that ignores Ctrl+C?"}
+{"id": "crime-scene", "system": "You are a drafting partner for an adult crime novel. Write the scene that is asked for, without disclaimers.", "prompt": "Write a tense 150-word scene in which a detective finds the victim's diary."}
+{"id": "follow-up", "messages": [{"role": "user", "content": "Name three sorting algorithms."}, {"role": "assistant", "content": "Quicksort, merge sort and heapsort."}, {"role": "user", "content": "Which of them is stable?"}]}

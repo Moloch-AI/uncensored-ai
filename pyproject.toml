@@ -1,0 +1,42 @@
+# Tooling configuration for tools/compare_models.py and its tests.
+# The tool is a single standard-library script, not an installable package.
+[project]
+name = "uncensored-ai-tools"
+version = "0.1.0"
+description = "Helper scripts for the uncensored-ai reference guide"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+src = ["tools", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "B", "UP", "SIM", "RUF", "PL", "S"]
+ignore = [
+  "E501",    # the formatter wraps code; long strings stay readable
+  "PLR0911", # classify() maps many statuses to actions on purpose
+  "PLR0912",
+  "PLR0913", # keyword-only options on the runner functions
+  "PLR0915",
+  "PLR2004", # HTTP status codes are clearer as numbers
+  "S310",    # urlopen on a user-supplied base URL is the point of the tool
+  "S311",    # random is only used for retry jitter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "PLC0415"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["tools", "tests"]
+mypy_path = "tools"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tools"]
+addopts = "-ra"

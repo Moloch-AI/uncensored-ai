@@ -1,0 +1,24 @@
+# Link checker configuration: https://lychee.cli.rs
+# CI runs: lychee --config lychee.toml './**/*.md'
+
+# Local servers in examples (the mock server, local runtimes) and the API base URL,
+# which answers 401 or 404 without a key, are not pages to check.
+exclude = [
+  '^https?://localhost',
+  '^https?://127\.0\.0\.1',
+  '^https?://host\.docker\.internal',
+  '^https://api\.molochai\.dev',
+]
+
+# Some hosts rate-limit link checkers; a 429 means the page exists.
+accept = ["200..=299", "429"]
+
+max_retries = 3
+retry_wait_time = 5
+timeout = 30
+max_concurrency = 8
+
+# Links inside code blocks are examples, not references.
+include_verbatim = false
+
+exclude_path = ["node_modules", ".venv", "venv", ".pytest_cache"]
