@@ -154,7 +154,7 @@ Streaming is the default to reach for: Cloudflare in front of the API gives up o
 The OpenAI SDKs work and are a fine choice. The [Python](https://github.com/Moloch-AI/uncensored-ai-python) and [TypeScript](https://github.com/Moloch-AI/uncensored-ai-node) SDKs add typed errors for the API's three error shapes (with `resets_at`, `context_cap`, `bound_by`), queue progress from stream comments, no retries on quota errors that cannot pass, `/auth/me` for per-model context limits, and handling of in-stream errors and the cap notice. Registry packages are not published yet; install from GitHub:
 
 ```bash
-pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.0"
+pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.1"
 npm install github:Moloch-AI/uncensored-ai-node#v0.1.0
 pipx install "git+https://github.com/Moloch-AI/uncensored-ai-cli@v0.1.0"
 ```

@@ -162,7 +162,7 @@ The official OpenAI SDKs are a fine choice and everything above uses them. The M
 
 | Repository | What it is | Install from GitHub |
 | --- | --- | --- |
-| [uncensored-ai-python](https://github.com/Moloch-AI/uncensored-ai-python) | Typed Python SDK, sync and async | `pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.0"` |
+| [uncensored-ai-python](https://github.com/Moloch-AI/uncensored-ai-python) | Typed Python SDK, sync and async | `pip install "git+https://github.com/Moloch-AI/uncensored-ai-python@v0.1.1"` |
 | [uncensored-ai-node](https://github.com/Moloch-AI/uncensored-ai-node) | TypeScript SDK for Node, ESM, no runtime dependencies | `npm install github:Moloch-AI/uncensored-ai-node#v0.1.0` |
 | [uncensored-ai-cli](https://github.com/Moloch-AI/uncensored-ai-cli) | Terminal chat client | `pipx install "git+https://github.com/Moloch-AI/uncensored-ai-cli@v0.1.0"` |
 | [uncensored-ai-api](https://github.com/Moloch-AI/uncensored-ai-api) | OpenAPI spec, dependency-free reference clients, mock server | Clone the repository |
