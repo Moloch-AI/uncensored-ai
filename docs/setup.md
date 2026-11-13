@@ -158,7 +158,7 @@ for await (const chunk of stream) {
 
 ## MolochAI SDKs and CLI
 
-The official OpenAI SDKs are a fine choice and everything above uses them. The MolochAI SDKs exist for the parts of this API the OpenAI SDKs leave to you: queue progress from SSE comments, typed errors with `resets_at`, `context_cap` and `bound_by`, not retrying quota errors that will not pass, `/auth/me` for per-model context limits, and in-stream errors and the cap notice.
+The official OpenAI SDKs are a fine choice and everything above uses them. The MolochAI SDKs exist for the parts of this API the OpenAI SDKs leave to you: queue progress from SSE comments, typed errors with `resets_at`, `context_cap` and `bound_by`, `/auth/me` for per-model context limits, and in-stream errors and the cap notice.
 
 | Repository | What it is | Install from GitHub |
 | --- | --- | --- |

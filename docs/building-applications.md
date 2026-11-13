@@ -408,7 +408,7 @@ Retry policy:
 - **Never auto-retry:** `429 quota_exceeded` and `429 session_quota_exceeded` (surface `resets_at`: the session cap is a fixed 5-hour window from your first request), and `401`, `402`, `403`, `413`, `422`.
 - **`503 model_unavailable`:** retry a few times at most, then choose another model ([below](#choosing-a-fallback-model)).
 
-The OpenAI SDKs retry on their own (two retries by default in the versions tested, Python 3.50.0 and JavaScript 7.56.0), including `429` quota errors that will not pass before `resets_at`. If you add your own retry layer, turn theirs off so the two do not multiply:
+The OpenAI SDKs retry on their own (two retries by default in the versions tested, Python 3.50.0 and JavaScript 7.56.0), including the rate-limit `429` and `503 model_unavailable`. They do not retry `402`, `413` or the quota and session `429`s: MolochAI sends `X-Should-Retry: false` on those, and the SDKs check that header before their own rules. If you add your own retry layer, turn theirs off so the two do not multiply:
 
 ```python
 import random
@@ -509,7 +509,7 @@ Frameworks reach this API through their OpenAI-compatible clients, so the reques
 | --- | --- | --- | --- |
 | Structured output | The `ChatOpenAI.with_structured_output` default sends only `response_format`, which is dropped, and fails validation. `method="function_calling"` works, because tools are supported. | Use a schema in the prompt and validate it, as without a framework. | `Output.object` sends `response_format` and fails. Use a tool, or a schema in the prompt. |
 | `reasoning_content` | Dropped on invoke and stream, and not sent back. The example keeps it with a small subclass. | Passed through; an inline `<think>` block is moved into it. | Becomes `reasoningText`, and is sent back in tool loops. |
-| Retries | Two by default, including quota 429s that cannot pass before `resets_at`. `.with_retry()` adds a second layer and does not cover `stream()`. | `max_retries` and `num_retries` stack. | Two by default, also on quota errors and `model_unavailable`. |
+| Retries | Two by default (the OpenAI SDK's), not on quota 429s, which carry `X-Should-Retry: false`. `.with_retry()` adds a second layer with its own rules and does not cover `stream()`. | Two by default (the OpenAI SDK's `max_retries`), not on quota 429s. `num_retries` repeats the whole call even on those, and stacks on `max_retries`. | Two by default, also on quota errors and `model_unavailable`: it ignores `X-Should-Retry`. |
 | Errors | 413 arrives as a plain `openai.APIStatusError`. | 413 is a generic `APIError`, and an in-stream error is reported as status 500. The original error, with the real status and body, is in the exception chain. | `streamText` does not throw: read `fullStream` for `error` parts, or a cut-off answer looks complete. The parsed error keeps `type` and drops `resets_at`. |
 | Other | Set `use_responses_api=False`, so the model name never switches it to OpenAI's Responses API. | `import litellm` downloads a price list unless `LITELLM_LOCAL_MODEL_COST_MAP=True` is set. | |
 

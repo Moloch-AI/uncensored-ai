@@ -40,7 +40,7 @@ Yes, for chat completions and the model list: set the base URL to `https://api.m
 
 ### Then why are there MolochAI SDKs?
 
-The OpenAI SDKs drop SSE comment lines (no queue progress), do not parse the three error shapes into typed errors with `resets_at`, `context_cap` and `bound_by`, retry `429` quota errors that will not pass, have no `/auth/me` for per-model context limits, and leave in-stream errors and the cap notice to you. The [Python](https://github.com/Moloch-AI/uncensored-ai-python) and [Node](https://github.com/Moloch-AI/uncensored-ai-node) SDKs handle those. The OpenAI SDKs remain a fine choice.
+The OpenAI SDKs drop SSE comment lines (no queue progress), do not parse the three error shapes into typed errors with `resets_at`, `context_cap` and `bound_by`, have no `/auth/me` for per-model context limits, and leave in-stream errors and the cap notice to you. The [Python](https://github.com/Moloch-AI/uncensored-ai-python) and [Node](https://github.com/Moloch-AI/uncensored-ai-node) SDKs handle those. The OpenAI SDKs remain a fine choice.
 
 ### Is there a free tier or a test key?
 

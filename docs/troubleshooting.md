@@ -88,7 +88,7 @@ Symptom, likely cause, fix. Start with the HTTP status if you have one: the [sta
 | Symptom | Likely cause | Fix |
 | --- | --- | --- |
 | Far more requests than expected after an error | Your retry loop and the SDK's built-in retries multiply. | Set the SDK's `max_retries` to 0 when you retry yourself. |
-| Quota `429`s retried a few times before failing | The OpenAI SDKs retry every `429`, including quota errors that will not pass before `resets_at`. | Handle `429` yourself: wait `Retry-After` for the rate limit, surface `resets_at` for quotas. |
+| Quota `429`s retried a few times before failing | A retry layer that ignores the `X-Should-Retry: false` header MolochAI sends on quota errors: the Vercel AI SDK's `maxRetries`, LiteLLM's `num_retries`, or your own loop. The OpenAI SDKs read the header and do not retry them. | Turn that layer's retries off and handle `429` yourself: wait `Retry-After` for the rate limit, surface `resets_at` for quotas. |
 | `e.body` has a different structure for different errors | The SDKs unwrap the gateway's `error` object, but validation and bare-message bodies are whole. | Read `type` from either shape ([`error_body`](building-applications.md#context-limits-and-413)). |
 | `502` `no_usage_accounting` with a `request_id` | An upstream problem with accounting for the request. | Retry with backoff. Include the `request_id` if you contact support. |
 
