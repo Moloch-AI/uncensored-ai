@@ -1,4 +1,4 @@
 # Development tools for tools/compare_models.py. The script itself needs only the standard library.
 mypy==2.4.1
 pytest==9.2.0
-ruff==0.17.5
+ruff==0.17.6
